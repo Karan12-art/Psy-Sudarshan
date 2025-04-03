@@ -1,49 +1,558 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSY Sudarshan - Maintenance Mode</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5;
-            color: #333;
-            text-align: center;
-            line-height: 1.6;
-        }
-        .maintenance-container {
-            max-width: 600px;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-        }
-        p {
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-        }
-    </style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta name="description" content="Official website for THE SUDARSHAN's FADE-OFF release. Listen to the latest tracks and watch music videos."/>
+  <meta name="keywords" content="music, fade-off, the sudarshan, latest songs, youtube, spotify, soundcloud, music player"/>
+  <meta name="author" content="THE SUDARSHAN"/>
+  <meta property="og:title" content="FADE-OFF - THE SUDARSHAN Official Website"/>
+  <meta property="og:description" content="Official website for THE SUDARSHAN's FADE-OFF release. Listen to the latest tracks and watch music videos."/>
+  <meta property="og:image" content="https://motionmusic.com/background.jpg"/>
+  <meta property="og:url" content="https://thesudarshan.com"/>
+  <title>FADE-OFF - PSY SUDARSHAN</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    html { scroll-behavior: smooth; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(90deg); }
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    @keyframes menuClick {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .animate-fadeInUp { animation: fadeInUp 1s ease-out forwards; }
+    .modal-content { animation: scaleIn 0.3s ease-out forwards; }
+    .bounce { animation: bounce 0.5s; }
+    .menu-click { animation: menuClick 0.3s ease; }
+    .glassmorphism { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .parallax { background-attachment: fixed; background-position: center; background-size: cover; }
+    .modal-link { position: relative; }
+    .modal-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0; background-color: currentColor; transition: width 0.3s ease; }
+    .modal-link:hover::after { width: 100%; }
+    
+    /* Video Section Styles */
+    .video-section {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .video-container {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .video-thumbnail {
+      width: 100%;
+      max-width: 600px;
+      height: 338px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 auto;
+      display: block;
+    }
+    .video-thumbnail:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+    .play-icon i {
+      background: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      padding: 20px;
+      font-size: 2rem;
+    }
+    .video-thumbnail:hover + .play-icon,
+    .play-icon:hover {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    .video-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    #videoPlayerWrapper {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      display: none;
+    }
+    .video-player {
+      width: 100%;
+      height: 450px;
+      border-radius: 8px;
+    }
+    .close-video-btn {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Music Carousel Styles */
+    .music-thumbnail {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+    .music-thumbnail.small {
+      width: 120px;
+      height: 120px;
+      opacity: 0.7;
+    }
+    .music-carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 220px;
+      width: 100%;
+    }
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .main-track {
+      z-index: 20;
+      transform: scale(1.1);
+      text-align: center;
+    }
+    .side-track {
+      position: absolute;
+      z-index: 10;
+      text-align: center;
+    }
+    .side-track.left {
+      left: 0;
+      transform: scale(0.9);
+    }
+    .side-track.right {
+      right: 0;
+      transform: scale(0.9);
+    }
+    .track-title {
+      margin-top: 10px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .scroll-btn {
+      position: absolute;
+      z-index: 30;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .scroll-btn:hover {
+      background: rgba(0,0,0,0.8);
+      transform: scale(1.1);
+    }
+    .scroll-btn.left {
+      left: 10px;
+    }
+    .scroll-btn.right {
+      right: 10px;
+    }
+    
+    .email-popup { 
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); display: flex; justify-content: center; align-items: center; z-index: 60; 
+    }
+    .email-popup-content { 
+      background: #fff; padding: 20px; border-radius: 8px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); animation: scaleIn 0.3s ease-out forwards; 
+    }
+    .email-popup-content p { 
+      color: #333; font-size: 1.1rem; margin-bottom: 20px; 
+    }
+    .email-popup-content button { 
+      background: #333; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s; 
+    }
+    .email-popup-content button:hover { 
+      background: #555; 
+    }
+    .listen-now-btn { 
+      font-weight: bold; 
+      text-decoration: underline; 
+      background: none; 
+      border: none; 
+      color: white; 
+      cursor: pointer; 
+      transition: color 0.3s ease; 
+    }
+    .listen-now-btn:hover { 
+      color: #ff4444; 
+    }
+  </style>
 </head>
-<body>
-    <div class="maintenance-container">
-        <h1>PSY Sudarshan</h1>
-        <p>Maintenance mode is on<br>site will be available soon. Thank you for your patience!</p>
-        <div class="footer">© PSY 2025</div>
+<body class="bg-black text-white font-montserrat">
+  <!-- Hero Section -->
+  <div class="relative h-screen overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/H86GLbQguWU?autoplay=1&mute=1&loop=1&playlist=H86GLbQguWU&controls=0&showinfo=0&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="filter: brightness(0.3);"></iframe>
     </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80 z-10"></div>
+    <div class="relative z-20 flex flex-col justify-between h-full p-4 sm:p-8">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold text-white animate-fadeInUp">FADE-OFF</h1>
+        <p class="text-lg sm:text-xl mt-2 animate-fadeInUp" style="animation-delay: 0.2s;">BY PSY SUDARSHAN</p>
+        <p class="text-lg sm:text-xl mt-2 animate-fadeInUp" style="animation-delay: 0.4s;">OUT NOW</p>
+        <button class="text-base sm:text-lg mt-4 bg-white text-black px-4 py-2 rounded-lg transition duration-300 hover:bg-gray-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] focus:outline-none" id="listenNowBtn" onclick="this.classList.add('bounce')">LISTEN NOW</button>
+      </div>
+      <div class="flex space-x-4">
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-blue-500" href="https://www.facebook.com/SudarshanKc.777"><i class="fab fa-facebook-f"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-gray-400" href="https://x.com/reallysudarshan?t=onCqkKL47ecrIYMHwtCgvg&s=07"><i class="fab fa-x-twitter"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-pink-400" href="https://www.instagram.com/psysudarshan"><i class="fab fa-instagram"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-black" href="https://www.tiktok.com/@thesudarshan"><i class="fab fa-tiktok"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-red-600" href="https://www.youtube.com/@TheSudarshanOfficial/videos"><i class="fab fa-youtube"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-red-500" href="https://music.youtube.com/channel/YOUR_YT_MUSIC_ID"><i class="fab fa-youtube"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-green-500" href="https://open.spotify.com/artist/3E3BboXKsqNWzn6iZj0Ddf"><i class="fab fa-spotify"></i></a>
+        <a class="text-white transition duration-300 hover:scale-125 hover:text-purple-500" href="https://music.apple.com/us/artist/the-sudarshan/YOUR_APPLE_MUSIC_ID"><i class="fab fa-apple"></i></a>
+      </div>
+    </div>
+    <div class="absolute top-4 right-4 z-50">
+      <img src="img/mood.png" alt="THE Sudarshan Logo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full shadow-lg transition duration-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(255,255,255,0.5)]"/>
+    </div>
+    <div class="absolute top-4 right-24 sm:right-28 flex items-center space-x-4 z-50">
+      <button class="menu-btn text-white text-xl sm:text-2xl p-3 rounded-full transition duration-300 hover:scale-110" id="menuBtn" aria-label="Open menu">
+        <i class="fas fa-bars transition-transform duration-300"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Video Section -->
+  <div class="video-section py-8 px-4 sm:px-8">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center animate-fadeInUp">VIDEO</h2>
+    <div class="video-container">
+      <div id="videoThumbnailContainer">
+        <img src="img/fade.jpg" alt="FADE-OFF Video Thumbnail" class="video-thumbnail" id="videoThumbnail"/>
+        <div class="play-icon" id="playButton">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <p class="video-title">FADE-OFF</p>
+    </div>
+    <div id="videoPlayerWrapper">
+      <iframe id="videoPlayer" class="video-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <button class="close-video-btn" id="closeVideoBtn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Music Section (Carousel) -->
+  <div class="py-12 px-4 sm:px-8 relative">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center animate-fadeInUp">MUSIC</h2>
+    
+    <div class="carousel-container">
+      <button class="scroll-btn left" id="scrollLeft">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="music-carousel">
+        <div id="musicCarousel"></div>
+      </div>
+      
+      <button class="scroll-btn right" id="scrollRight">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    
+    <div class="flex justify-center mt-6">
+      <button class="listen-now-btn text-lg sm:text-xl" id="mainListenBtn">LISTEN NOW</button>
+    </div>
+  </div>
+
+  <!-- Merch Section -->
+  <div class="py-12 px-4 sm:px-8 relative">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center animate-fadeInUp">MERCH</h2>
+    <div class="flex items-center justify-center">
+      <p class="text-lg sm:text-xl text-gray-400 animate-fadeInUp" style="animation-delay: 0.2s;">Coming Soon</p>
+    </div>
+  </div>
+
+  <!-- Upcoming Events Section -->
+  <div class="py-12 px-4 sm:px-8 relative">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center animate-fadeInUp">UPCOMING EVENTS</h2>
+    <div class="flex items-center justify-center">
+      <p class="text-lg sm:text-xl text-gray-400 animate-fadeInUp" style="animation-delay: 0.2s;">No Upcoming Events</p>
+    </div>
+  </div>
+
+  <!-- YOUTUBE PLAYER -->
+  <div class="fixed bottom-4 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-900 p-4 rounded-lg hidden w-11/12 sm:w-auto" id="playerContainer">
+    <iframe id="youtubePlayer" width="100%" height="150" sm:height="200" src="" frameborder="0" allowfullscreen class="sm:w-[300px] sm:h-[200px]"></iframe>
+    <button class="mt-2 bg-red-600 text-white px-4 py-2 rounded w-full sm:w-auto transition duration-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(255,0,0,0.8)]" onclick="closePlayer(); this.classList.add('bounce')">Close</button>
+  </div>
+
+  <!-- LISTEN ON MODAL -->
+  <div class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="modal">
+    <div class="glassmorphism text-white p-6 sm:p-8 rounded-lg relative w-11/12 sm:w-auto modal-content">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Listen on:</h2>
+      <div class="flex flex-col space-y-4">
+        <a class="text-base sm:text-lg text-blue-400 modal-link" href="https://www.facebook.com/SudarshanKc.777"><i class="fab fa-facebook-f mr-2"></i>Facebook</a>
+        <a class="text-base sm:text-lg text-gray-400 modal-link" href="https://x.com/reallysudarshan?t=onCqkKL47ecrIYMHwtCgvg&s=07"><i class="fab fa-x-twitter mr-2"></i>X</a>
+        <a class="text-base sm:text-lg text-black modal-link" href="https://www.tiktok.com/@thesudarshan"><i class="fab fa-tiktok mr-2"></i>TikTok</a>
+        <a class="text-base sm:text-lg text-red-400 modal-link" href="https://www.youtube.com/@TheSudarshanOfficial/videos"><i class="fab fa-youtube mr-2"></i>YouTube</a>
+        <a class="text-base sm:text-lg text-red-500 modal-link" href="https://music.youtube.com/channel/YOUR_YT_MUSIC_ID"><i class="fab fa-youtube mr-2"></i>YouTube Music</a>
+        <a class="text-base sm:text-lg text-green-400 modal-link" href="https://open.spotify.com/artist/3E3BboXKsqNWzn6iZj0Ddf"><i class="fab fa-spotify mr-2"></i>Spotify</a>
+        <a class="text-base sm:text-lg text-purple-400 modal-link" href="https://music.apple.com/us/artist/the-sudarshan/YOUR_APPLE_MUSIC_ID"><i class="fab fa-apple mr-2"></i>Apple Music</a>
+        <a class="text-base sm:text-lg text-orange-400 modal-link" href="https://soundcloud.com/user-423899445"><i class="fab fa-soundcloud mr-2"></i>SoundCloud</a>
+      </div>
+      <button class="mt-6 bg-white text-black px-4 py-2 w-full sm:w-auto rounded transition duration-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]" id="closeModalBtn" onclick="this.classList.add('bounce')">Close</button>
+      <button class="absolute top-2 right-2 text-white transition duration-300 hover:scale-125" id="exitModalBtn"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- MENU MODAL -->
+  <div class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="menuModal">
+    <div class="glassmorphism text-white p-6 sm:p-8 rounded-lg relative w-11/12 sm:w-auto modal-content">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Menu</h2>
+      <div class="flex flex-col space-y-4">
+        <a class="text-base sm:text-lg text-white modal-link hover:text-gray-300" href="#">Merch</a>
+        <a class="text-base sm:text-lg text-white modal-link hover:text-gray-300" href="#">Albums</a>
+        <a class="text-base sm:text-lg text-white modal-link hover:text-gray-300" href="#">Tours</a>
+        <a class="text-base sm:text-lg text-white modal-link hover:text-gray-300" href="#">Music</a>
+      </div>
+      <button class="mt-6 bg-white text-black px-4 py-2 w-full sm:w-auto rounded transition duration-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]" id="closeMenuModalBtn" onclick="this.classList.add('bounce')">Close</button>
+      <button class="absolute top-2 right-2 text-white transition duration-300 hover:scale-125" id="exitMenuModalBtn"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- Email Popup -->
+  <div class="email-popup hidden" id="emailPopup">
+    <div class="email-popup-content">
+      <p id="emailMessage"></p>
+      <button id="closeEmailPopupBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-center py-6">
+    <div class="mb-4">
+      <h3 class="text-lg font-bold mb-2">Send your email to us</h3>
+      <form id="emailForm" class="flex justify-center space-x-2">
+        <input type="email" placeholder="Your email" class="p-2 rounded-lg text-black w-64 focus:outline-none" id="emailInput" required/>
+        <button type="submit" class="bg-white text-black px-4 py-2 rounded-lg transition duration-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]">Submit</button>
+      </form>
+    </div>
+    <p class="text-sm">Copyright © 2025 Psysudarshan</p>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Listen On Modal Controls
+    const modal = document.getElementById('modal');
+    const listenNowBtn = document.getElementById('listenNowBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const exitModalBtn = document.getElementById('exitModalBtn');
+
+    listenNowBtn.addEventListener('click', function () { modal.classList.remove('hidden'); });
+    closeModalBtn.addEventListener('click', function () { modal.classList.add('hidden'); });
+    exitModalBtn.addEventListener('click', function () { modal.classList.add('hidden'); });
+    modal.addEventListener('click', function (event) { if (event.target === modal) modal.classList.add('hidden'); });
+
+    // Menu Modal Controls
+    const menuModal = document.getElementById('menuModal');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenuModalBtn = document.getElementById('closeMenuModalBtn');
+    const exitMenuModalBtn = document.getElementById('exitMenuModalBtn');
+    const menuIcon = menuBtn.querySelector('i');
+
+    menuBtn.addEventListener('click', function (event) {
+      event.stopPropagation();
+      menuModal.classList.remove('hidden');
+      menuIcon.classList.add('rotate-90');
+      menuBtn.classList.add('menu-click');
+    });
+    closeMenuModalBtn.addEventListener('click', function () {
+      menuModal.classList.add('hidden');
+      menuIcon.classList.remove('rotate-90');
+    });
+    exitMenuModalBtn.addEventListener('click', function () {
+      menuModal.classList.add('hidden');
+      menuIcon.classList.remove('rotate-90');
+    });
+    menuModal.addEventListener('click', function (event) {
+      if (event.target === menuModal) {
+        menuModal.classList.add('hidden');
+        menuIcon.classList.remove('rotate-90');
+      }
+    });
+
+    // YouTube Player Functions
+    const playerContainer = document.getElementById('playerContainer');
+    const youtubePlayer = document.getElementById('youtubePlayer');
+
+    function playSong(videoId) {
+      youtubePlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      playerContainer.classList.remove('hidden');
+    }
+
+    function closePlayer() {
+      youtubePlayer.src = "";
+      playerContainer.classList.add('hidden');
+    }
+
+    // Video Section Controls
+    const videoThumbnail = document.getElementById('videoThumbnail');
+    const playButton = document.getElementById('playButton');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoPlayerWrapper = document.getElementById('videoPlayerWrapper');
+    const closeVideoBtn = document.getElementById('closeVideoBtn');
+    const videoThumbnailContainer = document.getElementById('videoThumbnailContainer');
+
+    function playVideo() {
+      videoThumbnailContainer.style.display = 'none';
+      videoPlayerWrapper.style.display = 'block';
+      videoPlayer.src = "https://www.youtube.com/embed/-x66suBXFu8?autoplay=1&mute=0";
+    }
+
+    function closeVideo() {
+      videoPlayerWrapper.style.display = 'none';
+      videoPlayer.src = "";
+      videoThumbnailContainer.style.display = 'block';
+    }
+
+    videoThumbnail.addEventListener('click', playVideo);
+    playButton.addEventListener('click', playVideo);
+    closeVideoBtn.addEventListener('click', closeVideo);
+
+    // Close video when clicking outside
+    document.addEventListener('click', function(e) {
+      if (videoPlayerWrapper.style.display === 'block' && 
+          !videoPlayerWrapper.contains(e.target) && 
+          e.target !== videoThumbnail && 
+          e.target !== playButton) {
+        closeVideo();
+      }
+    });
+
+    // Music Carousel Controls
+    const musicCarousel = document.getElementById('musicCarousel');
+    const mainListenBtn = document.getElementById('mainListenBtn');
+    const scrollLeftBtn = document.getElementById('scrollLeft');
+    const scrollRightBtn = document.getElementById('scrollRight');
+
+    const songs = [
+      { id: 1, img: 'img/fade.jpg', title: 'FADE-OFF', videoId: '-x66suBXFu8' },
+      { id: 2, img: 'img/mood.jpg', title: 'MOOD', videoId: 'Hdr17f97hlI' },
+      { id: 3, img: 'img/ar.jpg', title: 'AEROPLANE', videoId: 'tY7LstX60Ds' },
+      { id: 4, img: 'img/thats.jpg', title: 'THAT\'S HOW WE DO', videoId: '7Fm3j9-7aE4' }
+    ];
+    
+    let currentIndex = 0;
+
+    function renderCarousel() {
+      musicCarousel.innerHTML = '';
+      
+      const prevIndex = (currentIndex - 1 + songs.length) % songs.length;
+      const nextIndex = (currentIndex + 1) % songs.length;
+      
+      const createTrack = (song, position) => {
+        const trackDiv = document.createElement('div');
+        trackDiv.className = position;
+        trackDiv.innerHTML = `
+          <img src="${song.img}" 
+               class="music-thumbnail rounded-lg ${position === 'main-track' ? '' : 'small'}" 
+               onclick="playSong('${song.videoId}')"/>
+          <p class="track-title">${song.title}</p>
+        `;
+        return trackDiv;
+      };
+      
+      musicCarousel.appendChild(createTrack(songs[prevIndex], 'side-track left'));
+      musicCarousel.appendChild(createTrack(songs[currentIndex], 'main-track'));
+      musicCarousel.appendChild(createTrack(songs[nextIndex], 'side-track right'));
+      
+      mainListenBtn.onclick = () => window.location.href = `https://youtu.be/${songs[currentIndex].videoId}`;
+    }
+
+    scrollLeftBtn.addEventListener('click', function() {
+      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+      renderCarousel();
+    });
+
+    scrollRightBtn.addEventListener('click', function() {
+      currentIndex = (currentIndex + 1) % songs.length;
+      renderCarousel();
+    });
+
+    // Initial render
+    renderCarousel();
+
+    // Email Form Submission
+    const emailForm = document.getElementById('emailForm');
+    const emailInput = document.getElementById('emailInput');
+    const emailPopup = document.getElementById('emailPopup');
+    const emailMessage = document.getElementById('emailMessage');
+    const closeEmailPopupBtn = document.getElementById('closeEmailPopupBtn');
+
+    emailForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const email = emailInput.value;
+      const username = email.split('@')[0];
+      emailMessage.textContent = `We will shortly contact you ${username}!`;
+      emailPopup.classList.remove('hidden');
+      emailInput.value = '';
+    });
+
+    closeEmailPopupBtn.addEventListener('click', function () {
+      emailPopup.classList.add('hidden');
+    });
+
+    emailPopup.addEventListener('click', function (event) {
+      if (event.target === emailPopup) {
+        emailPopup.classList.add('hidden');
+      }
+    });
+  </script>
 </body>
 </html>
